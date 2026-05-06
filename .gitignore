@@ -1,0 +1,39 @@
+# Build outputs
+target/
+build/
+out/
+
+# Maven
+.mvn/wrapper/maven-wrapper.jar
+
+# Flutter/Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+coverage/
+
+# Android/iOS generated files
+local.properties
+GeneratedPluginRegistrant.*
+Pods/
+.symlinks/
+DerivedData/
+
+# IDE and editor local files
+.idea/
+*.iml
+.vscode/*
+!.vscode/settings.json
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
