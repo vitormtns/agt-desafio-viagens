@@ -103,6 +103,52 @@ class ViagemService {
       );
     }
   }
+
+  Future<Viagem> atualizarStatus(int id, String status) async {
+    try {
+      final response = await _apiClient.patch(
+        '/viagens/$id/status',
+        body: {'status': status},
+      );
+
+      if (response.statusCode == 200) {
+        final json = jsonDecode(response.body) as Map<String, dynamic>;
+        return Viagem.fromJson(json);
+      }
+
+      if (response.statusCode == 401 || response.statusCode == 403) {
+        throw const ViagemException(
+          'Sua sessão expirou ou você não tem acesso a este recurso.',
+        );
+      }
+
+      if (response.statusCode == 404) {
+        throw const ViagemException('Viagem não encontrada.');
+      }
+
+      if (response.statusCode == 422) {
+        throw const ViagemException(
+          'Esta alteração de status não é permitida.',
+        );
+      }
+
+      throw const ViagemException('Não foi possível atualizar o status agora.');
+    } on ViagemException {
+      rethrow;
+    } on http.ClientException catch (_) {
+      throw const ViagemException(
+        'Não foi possível conectar ao servidor. Verifique se a API está rodando.',
+      );
+    } on FormatException catch (_) {
+      throw const ViagemException(
+        'A resposta do servidor veio em um formato inesperado.',
+      );
+    } catch (_) {
+      throw const ViagemException(
+        'Ocorreu um erro inesperado ao atualizar o status.',
+      );
+    }
+  }
 }
 
 class ViagemException implements Exception {

@@ -36,6 +36,14 @@ class ApiClient {
     );
   }
 
+  Future<http.Response> patch(String path, {Object? body}) async {
+    return _httpClient.patch(
+      Uri.parse('$baseUrl$path'),
+      headers: await _headers(),
+      body: body == null ? null : jsonEncode(body),
+    );
+  }
+
   Future<Map<String, String>> _headers({bool authenticated = true}) async {
     final tokens = authenticated ? await _tokenStorage.readTokens() : null;
 
