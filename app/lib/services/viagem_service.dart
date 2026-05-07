@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
+import '../core/utils/date_formatter.dart';
 import '../models/viagem.dart';
 import 'api_client.dart';
 
@@ -43,6 +44,62 @@ class ViagemService {
     } catch (_) {
       throw const ViagemException(
         'Ocorreu um erro inesperado ao carregar suas viagens.',
+      );
+    }
+  }
+
+  Future<Viagem> criarViagem({
+    required String destino,
+    required DateTime dataIda,
+    required DateTime dataVolta,
+    required String finalidade,
+    required String transporte,
+    String? observacoes,
+  }) async {
+    try {
+      final response = await _apiClient.post(
+        '/viagens',
+        body: {
+          'destino': destino,
+          'dataIda': DateFormatter.apiDate(dataIda),
+          'dataVolta': DateFormatter.apiDate(dataVolta),
+          'finalidade': finalidade,
+          'transporte': transporte,
+          'observacoes': observacoes,
+        },
+      );
+
+      if (response.statusCode == 201) {
+        final json = jsonDecode(response.body) as Map<String, dynamic>;
+        return Viagem.fromJson(json);
+      }
+
+      if (response.statusCode == 400) {
+        throw const ViagemException(
+          'Confira os dados informados e tente novamente.',
+        );
+      }
+
+      if (response.statusCode == 401 || response.statusCode == 403) {
+        throw const ViagemException(
+          'Sua sessão expirou ou você não tem acesso a este recurso.',
+        );
+      }
+
+      throw const ViagemException('Não foi possível salvar a viagem agora.');
+    } on ViagemException {
+      rethrow;
+    } on http.ClientException catch (_) {
+      throw const ViagemException(
+        'Não foi possível conectar ao servidor. Verifique se a API está rodando.',
+      );
+    } on FormatException catch (_) {
+      throw const ViagemException(
+        'A resposta do servidor veio em um formato inesperado.',
+      );
+    } catch (_) {
+      throw const ViagemException(
+        'Ocorreu um erro inesperado ao salvar a viagem.',
       );
     }
   }

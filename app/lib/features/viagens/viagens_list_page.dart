@@ -7,6 +7,7 @@ import '../../core/widgets/app_error_state.dart';
 import '../../core/widgets/app_loading.dart';
 import '../../state/auth_state.dart';
 import '../../state/viagem_state.dart';
+import 'viagem_form_page.dart';
 import 'widgets/viagem_card.dart';
 
 class ViagensListPage extends StatefulWidget {
@@ -50,14 +51,16 @@ class _ViagensListPageState extends State<ViagensListPage> {
         child: _ViagensBody(viagemState: viagemState),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                'Funcionalidade será implementada na próxima etapa.',
-              ),
-            ),
+        onPressed: () async {
+          final created = await Navigator.of(context).push<bool>(
+            MaterialPageRoute(builder: (_) => const ViagemFormPage()),
           );
+
+          if (!context.mounted || created != true) {
+            return;
+          }
+
+          await context.read<ViagemState>().loadViagens();
         },
         icon: const Icon(Icons.add),
         label: const Text('Nova viagem'),
