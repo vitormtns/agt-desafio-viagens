@@ -24,16 +24,20 @@ class ApiClient {
     );
   }
 
-  Future<http.Response> post(String path, {Object? body}) async {
+  Future<http.Response> post(
+    String path, {
+    Object? body,
+    bool authenticated = true,
+  }) async {
     return _httpClient.post(
       Uri.parse('$baseUrl$path'),
-      headers: await _headers(),
+      headers: await _headers(authenticated: authenticated),
       body: body == null ? null : jsonEncode(body),
     );
   }
 
-  Future<Map<String, String>> _headers() async {
-    final tokens = await _tokenStorage.readTokens();
+  Future<Map<String, String>> _headers({bool authenticated = true}) async {
+    final tokens = authenticated ? await _tokenStorage.readTokens() : null;
 
     return {
       'Content-Type': 'application/json',

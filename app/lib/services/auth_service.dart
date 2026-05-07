@@ -1,3 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:http/http.dart' as http;
+
+import '../models/auth_tokens.dart';
 import 'api_client.dart';
 import 'token_storage.dart';
 
@@ -9,9 +15,61 @@ class AuthService {
   final ApiClient _apiClient;
   final TokenStorage _tokenStorage;
 
-  ApiClient get apiClient => _apiClient;
+  Future<AuthTokens> login({
+    required String username,
+    required String password,
+  }) async {
+    try {
+      final response = await _apiClient.post(
+        '/auth/login',
+        authenticated: false,
+        body: {'username': username, 'password': password},
+      );
+
+      if (response.statusCode == 200) {
+        final json = jsonDecode(response.body) as Map<String, dynamic>;
+        final tokens = AuthTokens.fromJson(json);
+        await _tokenStorage.saveTokens(tokens);
+        return tokens;
+      }
+
+      if (response.statusCode == 401 || response.statusCode == 403) {
+        throw const AuthException('Usuario ou senha invalidos.');
+      }
+
+      throw const AuthException(
+        'Nao foi possivel entrar agora. Tente novamente em instantes.',
+      );
+    } on AuthException {
+      rethrow;
+    } on SocketException catch (_) {
+      throw const AuthException(
+        'Nao foi possivel conectar ao servidor. Verifique se a API esta rodando.',
+      );
+    } on http.ClientException catch (_) {
+      throw const AuthException(
+        'Nao foi possivel conectar ao servidor. Verifique a URL da API.',
+      );
+    } on FormatException catch (_) {
+      throw const AuthException(
+        'A resposta do servidor veio em um formato inesperado.',
+      );
+    } catch (_) {
+      throw const AuthException('Ocorreu um erro inesperado ao tentar entrar.');
+    }
+  }
+
+  Future<AuthTokens?> readSavedTokens() {
+    return _tokenStorage.readTokens();
+  }
 
   Future<void> logout() async {
     await _tokenStorage.clearTokens();
   }
+}
+
+class AuthException implements Exception {
+  const AuthException(this.message);
+
+  final String message;
 }
