@@ -71,7 +71,8 @@ class _ViagemFormPageState extends State<ViagemFormPage> {
     } catch (_) {
       if (mounted) {
         setState(() {
-          _optionsErrorMessage = 'Não foi possível carregar as opções.';
+          _optionsErrorMessage =
+              'Verifique sua conexão com o servidor e tente novamente.';
         });
       }
     } finally {
@@ -145,6 +146,7 @@ class _ViagemFormPageState extends State<ViagemFormPage> {
 
     if (_optionsErrorMessage != null) {
       return AppErrorState(
+        title: 'Não foi possível carregar as opções.',
         message: _optionsErrorMessage!,
         onRetry: _loadOptions,
       );

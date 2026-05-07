@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:http/http.dart' as http;
-
 import '../core/utils/date_formatter.dart';
 import '../models/viagem.dart';
 import 'api_client.dart';
@@ -33,10 +31,8 @@ class ViagemService {
       );
     } on ViagemException {
       rethrow;
-    } on http.ClientException catch (_) {
-      throw const ViagemException(
-        'Não foi possível conectar ao servidor. Verifique se a API está rodando.',
-      );
+    } on ApiException catch (error) {
+      throw ViagemException(error.message);
     } on FormatException catch (_) {
       throw const ViagemException(
         'A resposta do servidor veio em um formato inesperado.',
@@ -89,10 +85,8 @@ class ViagemService {
       throw const ViagemException('Não foi possível salvar a viagem agora.');
     } on ViagemException {
       rethrow;
-    } on http.ClientException catch (_) {
-      throw const ViagemException(
-        'Não foi possível conectar ao servidor. Verifique se a API está rodando.',
-      );
+    } on ApiException catch (error) {
+      throw ViagemException(error.message);
     } on FormatException catch (_) {
       throw const ViagemException(
         'A resposta do servidor veio em um formato inesperado.',
@@ -135,10 +129,8 @@ class ViagemService {
       throw const ViagemException('Não foi possível atualizar o status agora.');
     } on ViagemException {
       rethrow;
-    } on http.ClientException catch (_) {
-      throw const ViagemException(
-        'Não foi possível conectar ao servidor. Verifique se a API está rodando.',
-      );
+    } on ApiException catch (error) {
+      throw ViagemException(error.message);
     } on FormatException catch (_) {
       throw const ViagemException(
         'A resposta do servidor veio em um formato inesperado.',

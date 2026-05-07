@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:http/http.dart' as http;
-
 import '../models/auth_tokens.dart';
 import 'api_client.dart';
 import 'token_storage.dart';
@@ -41,10 +39,8 @@ class AuthService {
       );
     } on AuthException {
       rethrow;
-    } on http.ClientException catch (_) {
-      throw const AuthException(
-        'Não foi possível conectar ao servidor. Verifique se a API está rodando.',
-      );
+    } on ApiException catch (error) {
+      throw AuthException(error.message);
     } on FormatException catch (_) {
       throw const AuthException(
         'A resposta do servidor veio em um formato inesperado.',

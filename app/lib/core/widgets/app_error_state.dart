@@ -4,8 +4,14 @@ import '../theme/app_colors.dart';
 import 'app_button.dart';
 
 class AppErrorState extends StatelessWidget {
-  const AppErrorState({super.key, required this.message, this.onRetry});
+  const AppErrorState({
+    super.key,
+    this.title = 'Não foi possível carregar os dados',
+    required this.message,
+    this.onRetry,
+  });
 
+  final String title;
   final String message;
   final VoidCallback? onRetry;
 
@@ -24,7 +30,7 @@ class AppErrorState extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              'Não foi possível carregar os dados',
+              title,
               style: Theme.of(context).textTheme.titleMedium,
               textAlign: TextAlign.center,
             ),

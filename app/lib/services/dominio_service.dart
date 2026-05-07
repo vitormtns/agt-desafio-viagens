@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:http/http.dart' as http;
-
 import 'api_client.dart';
 
 class DominioService {
@@ -36,10 +34,8 @@ class DominioService {
       throw const DominioException('Não foi possível carregar as opções.');
     } on DominioException {
       rethrow;
-    } on http.ClientException catch (_) {
-      throw const DominioException(
-        'Não foi possível conectar ao servidor. Verifique se a API está rodando.',
-      );
+    } on ApiException catch (error) {
+      throw DominioException(error.message);
     } on FormatException catch (_) {
       throw const DominioException(
         'A resposta do servidor veio em um formato inesperado.',
