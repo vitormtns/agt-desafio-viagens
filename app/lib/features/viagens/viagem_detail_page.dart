@@ -9,7 +9,7 @@ class ViagemDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: AppEmptyState(
-        title: 'Detalhe da viagem sera implementado na proxima etapa',
+        title: 'Detalhe da viagem será implementado na próxima etapa',
         icon: Icons.description_outlined,
       ),
     );

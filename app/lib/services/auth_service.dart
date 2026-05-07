@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
@@ -34,21 +33,17 @@ class AuthService {
       }
 
       if (response.statusCode == 401 || response.statusCode == 403) {
-        throw const AuthException('Usuario ou senha invalidos.');
+        throw const AuthException('Usuário ou senha inválidos.');
       }
 
       throw const AuthException(
-        'Nao foi possivel entrar agora. Tente novamente em instantes.',
+        'Não foi possível entrar agora. Tente novamente em instantes.',
       );
     } on AuthException {
       rethrow;
-    } on SocketException catch (_) {
-      throw const AuthException(
-        'Nao foi possivel conectar ao servidor. Verifique se a API esta rodando.',
-      );
     } on http.ClientException catch (_) {
       throw const AuthException(
-        'Nao foi possivel conectar ao servidor. Verifique a URL da API.',
+        'Não foi possível conectar ao servidor. Verifique se a API está rodando.',
       );
     } on FormatException catch (_) {
       throw const AuthException(

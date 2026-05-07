@@ -9,7 +9,7 @@ class ViagemFormPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: AppEmptyState(
-        title: 'Formulario de viagem sera implementado na proxima etapa',
+        title: 'Formulário de viagem será implementado na próxima etapa',
         icon: Icons.edit_note_outlined,
       ),
     );

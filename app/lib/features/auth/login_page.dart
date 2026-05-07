@@ -79,13 +79,13 @@ class _LoginPageState extends State<LoginPage> {
                       enabled: !authState.isLoading,
                       textInputAction: TextInputAction.next,
                       decoration: const InputDecoration(
-                        labelText: 'Usuario',
+                        labelText: 'Usuário',
                         hintText: 'usuario.teste',
                         prefixIcon: Icon(Icons.person_outline),
                       ),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Informe o usuario.';
+                          return 'Informe o usuário.';
                         }
                         return null;
                       },

@@ -28,7 +28,7 @@ class AuthState extends ChangeNotifier {
       _tokens = await _authService.readSavedTokens();
     } catch (_) {
       _tokens = null;
-      _errorMessage = 'Nao foi possivel verificar sua sessao salva.';
+      _errorMessage = 'Não foi possível verificar sua sessão salva.';
     } finally {
       _isCheckingAuth = false;
       notifyListeners();

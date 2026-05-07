@@ -53,7 +53,7 @@ class StatusBadge extends StatelessWidget {
       case 'EM_ANDAMENTO':
         return 'Em andamento';
       case 'CONCLUIDA':
-        return 'Concluida';
+        return 'Concluída';
       case 'CANCELADA':
         return 'Cancelada';
       default:

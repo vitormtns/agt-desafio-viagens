@@ -24,7 +24,7 @@ class AppErrorState extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              'Nao foi possivel carregar os dados',
+              'Não foi possível carregar os dados',
               style: Theme.of(context).textTheme.titleMedium,
               textAlign: TextAlign.center,
             ),

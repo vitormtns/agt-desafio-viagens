@@ -29,7 +29,7 @@ class _AuthGateState extends State<AuthGate> {
     final authState = context.watch<AuthState>();
 
     if (authState.isCheckingAuth) {
-      return const Scaffold(body: AppLoading(message: 'Verificando sessao...'));
+      return const Scaffold(body: AppLoading(message: 'Verificando sessão...'));
     }
 
     if (authState.isAuthenticated) {
