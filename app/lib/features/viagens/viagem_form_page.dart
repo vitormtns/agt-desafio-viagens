@@ -170,6 +170,7 @@ class _ViagemFormPageState extends State<ViagemFormPage> {
           TextFormField(
             controller: _destinoController,
             enabled: !viagemState.isSaving,
+            keyboardType: TextInputType.text,
             textInputAction: TextInputAction.next,
             decoration: const InputDecoration(
               labelText: 'Destino',
