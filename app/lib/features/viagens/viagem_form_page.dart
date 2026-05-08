@@ -239,6 +239,8 @@ class _ViagemFormPageState extends State<ViagemFormPage> {
               return null;
             },
           ),
+          const SizedBox(height: 8),
+          const _DateHelperText(),
           const SizedBox(height: 16),
           DropdownButtonFormField<String>(
             initialValue: _finalidadeSelecionada,
@@ -315,6 +317,33 @@ class _ViagemFormPageState extends State<ViagemFormPage> {
           const SizedBox(height: 16),
         ],
       ),
+    );
+  }
+}
+
+class _DateHelperText extends StatelessWidget {
+  const _DateHelperText();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Icon(
+          Icons.info_outline,
+          size: 16,
+          color: AppColors.textSecondary,
+        ),
+        const SizedBox(width: 6),
+        Expanded(
+          child: Text(
+            'A data de volta não pode ser anterior à data de ida.',
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: AppColors.textSecondary),
+          ),
+        ),
+      ],
     );
   }
 }

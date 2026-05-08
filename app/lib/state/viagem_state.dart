@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 
+import '../core/utils/viagem_sorter.dart';
 import '../models/viagem.dart';
 import '../services/api_client.dart';
 import '../services/viagem_service.dart';
@@ -31,7 +32,7 @@ class ViagemState extends ChangeNotifier {
       final viagens = await _viagemService.listarViagens();
       _viagens
         ..clear()
-        ..addAll(viagens);
+        ..addAll(sortViagensForDisplay(viagens));
     } on ViagemException catch (error) {
       _errorMessage = error.message;
     } on ApiUnauthorizedException {
@@ -93,6 +94,10 @@ class ViagemState extends ChangeNotifier {
       final index = _viagens.indexWhere((viagem) => viagem.id == id);
       if (index >= 0) {
         _viagens[index] = viagemAtualizada;
+        final sortedViagens = sortViagensForDisplay(_viagens);
+        _viagens
+          ..clear()
+          ..addAll(sortedViagens);
       }
       return viagemAtualizada;
     } on ViagemException catch (error) {
