@@ -176,7 +176,9 @@ class _ViagemFormPageState extends State<ViagemFormPage> {
         children: [
           Text(
             'Informe os dados da solicitação',
-            style: Theme.of(context).textTheme.titleMedium,
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontSize: 18),
           ),
           const SizedBox(height: 4),
           Text(
@@ -310,6 +312,7 @@ class _ViagemFormPageState extends State<ViagemFormPage> {
             isLoading: viagemState.isSaving,
             onPressed: _save,
           ),
+          const SizedBox(height: 16),
         ],
       ),
     );

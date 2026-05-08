@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
+import 'app_button.dart';
 
 class AppEmptyState extends StatelessWidget {
   const AppEmptyState({
@@ -8,11 +9,17 @@ class AppEmptyState extends StatelessWidget {
     required this.title,
     this.message,
     this.icon = Icons.inbox_outlined,
+    this.actionLabel,
+    this.actionIcon,
+    this.onAction,
   });
 
   final String title;
   final String? message;
   final IconData icon;
+  final String? actionLabel;
+  final IconData? actionIcon;
+  final VoidCallback? onAction;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +39,17 @@ class AppEmptyState extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppColors.textSecondary,
+                ),
+              ),
+            ],
+            if (actionLabel != null && onAction != null) ...[
+              const SizedBox(height: 18),
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 220),
+                child: AppButton(
+                  label: actionLabel!,
+                  icon: actionIcon,
+                  onPressed: onAction,
                 ),
               ),
             ],

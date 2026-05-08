@@ -40,6 +40,18 @@ class _ViagensListPageState extends State<ViagensListPage> {
     }
   }
 
+  Future<void> _openNewViagem() async {
+    final created = await Navigator.of(
+      context,
+    ).push<bool>(MaterialPageRoute(builder: (_) => const ViagemFormPage()));
+
+    if (!mounted || created != true) {
+      return;
+    }
+
+    await _loadViagens();
+  }
+
   @override
   Widget build(BuildContext context) {
     final authState = context.watch<AuthState>();
@@ -49,6 +61,19 @@ class _ViagensListPageState extends State<ViagensListPage> {
       appBar: AppBar(
         title: const Text('Minhas viagens'),
         actions: [
+          IconButton(
+            tooltip: 'Atualizar viagens',
+            onPressed: viagemState.isLoading ? null : _loadViagens,
+            icon: viagemState.isLoading
+                ? const SizedBox.square(
+                    dimension: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Colors.white,
+                    ),
+                  )
+                : const Icon(Icons.refresh),
+          ),
           IconButton(
             tooltip: 'Sair',
             onPressed: authState.isLoading
@@ -60,20 +85,14 @@ class _ViagensListPageState extends State<ViagensListPage> {
       ),
       body: RefreshIndicator(
         onRefresh: _loadViagens,
-        child: _ViagensBody(viagemState: viagemState, onRetry: _loadViagens),
+        child: _ViagensBody(
+          viagemState: viagemState,
+          onRetry: _loadViagens,
+          onNewViagem: _openNewViagem,
+        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async {
-          final created = await Navigator.of(context).push<bool>(
-            MaterialPageRoute(builder: (_) => const ViagemFormPage()),
-          );
-
-          if (!context.mounted || created != true) {
-            return;
-          }
-
-          await _loadViagens();
-        },
+        onPressed: _openNewViagem,
         icon: const Icon(Icons.add),
         label: const Text('Nova viagem'),
       ),
@@ -83,10 +102,15 @@ class _ViagensListPageState extends State<ViagensListPage> {
 }
 
 class _ViagensBody extends StatelessWidget {
-  const _ViagensBody({required this.viagemState, required this.onRetry});
+  const _ViagensBody({
+    required this.viagemState,
+    required this.onRetry,
+    required this.onNewViagem,
+  });
 
   final ViagemState viagemState;
   final Future<void> Function() onRetry;
+  final VoidCallback onNewViagem;
 
   @override
   Widget build(BuildContext context) {
@@ -102,16 +126,28 @@ class _ViagensBody extends StatelessWidget {
     }
 
     if (viagemState.isEmpty) {
-      return const AppEmptyState(
-        title: 'Nenhuma viagem encontrada',
-        message: 'Suas solicitações corporativas aparecerão aqui.',
-        icon: Icons.route_outlined,
+      return ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.fromLTRB(16, 24, 16, 128),
+        children: [
+          SizedBox(
+            height: MediaQuery.sizeOf(context).height * 0.55,
+            child: AppEmptyState(
+              title: 'Nenhuma viagem cadastrada',
+              message: 'Crie sua primeira solicitação de viagem corporativa.',
+              icon: Icons.route_outlined,
+              actionLabel: 'Nova viagem',
+              actionIcon: Icons.add,
+              onAction: onNewViagem,
+            ),
+          ),
+        ],
       );
     }
 
     return ListView.separated(
       physics: const AlwaysScrollableScrollPhysics(),
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 128),
       itemCount: viagemState.viagens.length + 1,
       separatorBuilder: (_, index) =>
           index == 0 ? const SizedBox(height: 16) : const SizedBox(height: 12),
@@ -152,7 +188,9 @@ class _ListHeader extends StatelessWidget {
       children: [
         Text(
           'Acompanhe suas solicitações corporativas',
-          style: Theme.of(context).textTheme.titleMedium,
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium?.copyWith(fontSize: 18),
         ),
         const SizedBox(height: 4),
         Text(

@@ -151,6 +151,8 @@ class _ViagemDetailPageState extends State<ViagemDetailPage> {
               _Header(viagem: _viagem),
               const SizedBox(height: 16),
               _InfoCard(viagem: _viagem),
+              const SizedBox(height: 16),
+              _NextActionCard(status: _viagem.status),
               const SizedBox(height: 20),
               ViagemActionButtons(
                 status: _viagem.status,
@@ -161,6 +163,76 @@ class _ViagemDetailPageState extends State<ViagemDetailPage> {
           ),
         ),
         backgroundColor: AppColors.background,
+      ),
+    );
+  }
+}
+
+class _NextActionCard extends StatelessWidget {
+  const _NextActionCard({required this.status});
+
+  final String status;
+
+  String get _message {
+    switch (status) {
+      case 'AGENDADA':
+        return 'Esta viagem está agendada. Você pode iniciar ou cancelar a solicitação.';
+      case 'EM_ANDAMENTO':
+        return 'Esta viagem está em andamento. Você pode concluir ou cancelar a solicitação.';
+      case 'CONCLUIDA':
+        return 'Esta viagem já foi concluída.';
+      case 'CANCELADA':
+        return 'Esta viagem foi cancelada.';
+      default:
+        return 'Acompanhe o status desta solicitação.';
+    }
+  }
+
+  IconData get _icon {
+    switch (status) {
+      case 'AGENDADA':
+        return Icons.event_available_outlined;
+      case 'EM_ANDAMENTO':
+        return Icons.directions_walk_outlined;
+      case 'CONCLUIDA':
+        return Icons.check_circle_outline;
+      case 'CANCELADA':
+        return Icons.cancel_outlined;
+      default:
+        return Icons.info_outline;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(_icon, color: AppColors.primary, size: 22),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Próxima ação',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    _message,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

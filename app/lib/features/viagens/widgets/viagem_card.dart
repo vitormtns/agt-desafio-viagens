@@ -21,7 +21,7 @@ class ViagemCard extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(8),
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(18),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -31,52 +31,104 @@ class ViagemCard extends StatelessWidget {
                   Expanded(
                     child: Text(
                       viagem.destino,
-                      style: Theme.of(context).textTheme.titleMedium,
+                      style: Theme.of(
+                        context,
+                      ).textTheme.titleMedium?.copyWith(fontSize: 18),
                     ),
                   ),
                   const SizedBox(width: 12),
                   StatusBadge(status: viagem.status),
                 ],
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 14),
               _InfoRow(
                 icon: Icons.calendar_today_outlined,
                 label: 'Período',
                 value: periodo,
               ),
-              const SizedBox(height: 8),
-              _InfoRow(
-                icon: Icons.flag_outlined,
-                label: 'Finalidade',
-                value: viagem.finalidade,
+              const SizedBox(height: 12),
+              Wrap(
+                spacing: 12,
+                runSpacing: 10,
+                children: [
+                  _InfoChip(
+                    icon: Icons.flag_outlined,
+                    label: 'Finalidade',
+                    value: viagem.finalidade,
+                  ),
+                  _InfoChip(
+                    icon: Icons.directions_car_outlined,
+                    label: 'Transporte',
+                    value: viagem.transporte,
+                  ),
+                ],
               ),
-              const SizedBox(height: 8),
-              _InfoRow(
-                icon: Icons.directions_car_outlined,
-                label: 'Transporte',
-                value: viagem.transporte,
-              ),
+              const SizedBox(height: 14),
+              const Divider(height: 1),
               const SizedBox(height: 12),
               Row(
                 children: [
                   Text(
-                    'Ver detalhes',
+                    'Toque para ver detalhes',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: AppColors.primary,
-                      fontWeight: FontWeight.w700,
+                      color: AppColors.textSecondary,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                   const SizedBox(width: 4),
                   const Icon(
-                    Icons.arrow_forward,
+                    Icons.chevron_right,
                     size: 16,
-                    color: AppColors.primary,
+                    color: AppColors.textSecondary,
                   ),
                 ],
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _InfoChip extends StatelessWidget {
+  const _InfoChip({
+    required this.icon,
+    required this.label,
+    required this.value,
+  });
+
+  final IconData icon;
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return ConstrainedBox(
+      constraints: const BoxConstraints(minWidth: 136),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, size: 18, color: AppColors.textSecondary),
+          const SizedBox(width: 8),
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: AppColors.textSecondary,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(value, style: Theme.of(context).textTheme.bodyMedium),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
