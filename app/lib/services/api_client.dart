@@ -26,6 +26,7 @@ class ApiClient {
         Uri.parse('$baseUrl$path'),
         headers: await _headers(),
       ),
+      authenticated: true,
     );
   }
 
@@ -40,6 +41,7 @@ class ApiClient {
         headers: await _headers(authenticated: authenticated),
         body: body == null ? null : jsonEncode(body),
       ),
+      authenticated: authenticated,
     );
   }
 
@@ -50,12 +52,23 @@ class ApiClient {
         headers: await _headers(),
         body: body == null ? null : jsonEncode(body),
       ),
+      authenticated: true,
     );
   }
 
-  Future<http.Response> _send(Future<http.Response> Function() request) async {
+  Future<http.Response> _send(
+    Future<http.Response> Function() request, {
+    required bool authenticated,
+  }) async {
     try {
-      return await request().timeout(_timeout);
+      final response = await request().timeout(_timeout);
+
+      if (authenticated &&
+          (response.statusCode == 401 || response.statusCode == 403)) {
+        throw const ApiUnauthorizedException();
+      }
+
+      return response;
     } on TimeoutException catch (_) {
       throw const ApiException(
         'Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.',
@@ -81,6 +94,14 @@ class ApiClient {
 
 class ApiException implements Exception {
   const ApiException(this.message);
+
+  final String message;
+}
+
+class ApiUnauthorizedException implements Exception {
+  const ApiUnauthorizedException([
+    this.message = 'Sua sessão expirou. Faça login novamente.',
+  ]);
 
   final String message;
 }

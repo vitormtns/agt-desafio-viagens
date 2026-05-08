@@ -6,7 +6,9 @@ import '../../core/utils/date_formatter.dart';
 import '../../core/widgets/app_button.dart';
 import '../../core/widgets/app_error_state.dart';
 import '../../core/widgets/app_loading.dart';
+import '../../services/api_client.dart';
 import '../../services/dominio_service.dart';
+import '../../state/auth_state.dart';
 import '../../state/viagem_state.dart';
 
 class ViagemFormPage extends StatefulWidget {
@@ -68,6 +70,10 @@ class _ViagemFormPageState extends State<ViagemFormPage> {
       if (mounted) {
         setState(() => _optionsErrorMessage = error.message);
       }
+    } on ApiUnauthorizedException {
+      if (mounted) {
+        await context.read<AuthState>().expireSession();
+      }
     } catch (_) {
       if (mounted) {
         setState(() {
@@ -107,16 +113,7 @@ class _ViagemFormPageState extends State<ViagemFormPage> {
       return;
     }
 
-    final success = await context.read<ViagemState>().criarViagem(
-      destino: _destinoController.text.trim(),
-      dataIda: _dataIda!,
-      dataVolta: _dataVolta!,
-      finalidade: _finalidadeSelecionada!,
-      transporte: _transporteSelecionado!,
-      observacoes: _observacoesController.text.trim().isEmpty
-          ? null
-          : _observacoesController.text.trim(),
-    );
+    final success = await _criarViagem();
 
     if (!mounted || !success) {
       return;
@@ -126,6 +123,26 @@ class _ViagemFormPageState extends State<ViagemFormPage> {
       context,
     ).showSnackBar(const SnackBar(content: Text('Viagem criada com sucesso')));
     Navigator.of(context).pop(true);
+  }
+
+  Future<bool> _criarViagem() async {
+    try {
+      return await context.read<ViagemState>().criarViagem(
+        destino: _destinoController.text.trim(),
+        dataIda: _dataIda!,
+        dataVolta: _dataVolta!,
+        finalidade: _finalidadeSelecionada!,
+        transporte: _transporteSelecionado!,
+        observacoes: _observacoesController.text.trim().isEmpty
+            ? null
+            : _observacoesController.text.trim(),
+      );
+    } on ApiUnauthorizedException {
+      if (mounted) {
+        await context.read<AuthState>().expireSession();
+      }
+      return false;
+    }
   }
 
   @override

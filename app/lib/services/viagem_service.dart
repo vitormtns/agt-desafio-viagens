@@ -31,6 +31,8 @@ class ViagemService {
       );
     } on ViagemException {
       rethrow;
+    } on ApiUnauthorizedException {
+      rethrow;
     } on ApiException catch (error) {
       throw ViagemException(error.message);
     } on FormatException catch (_) {
@@ -85,6 +87,8 @@ class ViagemService {
       throw const ViagemException('Não foi possível salvar a viagem agora.');
     } on ViagemException {
       rethrow;
+    } on ApiUnauthorizedException {
+      rethrow;
     } on ApiException catch (error) {
       throw ViagemException(error.message);
     } on FormatException catch (_) {
@@ -128,6 +132,8 @@ class ViagemService {
 
       throw const ViagemException('Não foi possível atualizar o status agora.');
     } on ViagemException {
+      rethrow;
+    } on ApiUnauthorizedException {
       rethrow;
     } on ApiException catch (error) {
       throw ViagemException(error.message);

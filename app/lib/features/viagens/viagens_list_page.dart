@@ -5,6 +5,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/widgets/app_empty_state.dart';
 import '../../core/widgets/app_error_state.dart';
 import '../../core/widgets/app_loading.dart';
+import '../../services/api_client.dart';
 import '../../state/auth_state.dart';
 import '../../state/viagem_state.dart';
 import 'viagem_detail_page.dart';
@@ -24,9 +25,19 @@ class _ViagensListPageState extends State<ViagensListPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        context.read<ViagemState>().loadViagens();
+        _loadViagens();
       }
     });
+  }
+
+  Future<void> _loadViagens() async {
+    try {
+      await context.read<ViagemState>().loadViagens();
+    } on ApiUnauthorizedException {
+      if (mounted) {
+        await context.read<AuthState>().expireSession();
+      }
+    }
   }
 
   @override
@@ -48,8 +59,8 @@ class _ViagensListPageState extends State<ViagensListPage> {
         ],
       ),
       body: RefreshIndicator(
-        onRefresh: () => context.read<ViagemState>().loadViagens(),
-        child: _ViagensBody(viagemState: viagemState),
+        onRefresh: _loadViagens,
+        child: _ViagensBody(viagemState: viagemState, onRetry: _loadViagens),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
@@ -61,7 +72,7 @@ class _ViagensListPageState extends State<ViagensListPage> {
             return;
           }
 
-          await context.read<ViagemState>().loadViagens();
+          await _loadViagens();
         },
         icon: const Icon(Icons.add),
         label: const Text('Nova viagem'),
@@ -72,9 +83,10 @@ class _ViagensListPageState extends State<ViagensListPage> {
 }
 
 class _ViagensBody extends StatelessWidget {
-  const _ViagensBody({required this.viagemState});
+  const _ViagensBody({required this.viagemState, required this.onRetry});
 
   final ViagemState viagemState;
+  final Future<void> Function() onRetry;
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +97,7 @@ class _ViagensBody extends StatelessWidget {
     if (viagemState.errorMessage != null) {
       return AppErrorState(
         message: viagemState.errorMessage!,
-        onRetry: () => context.read<ViagemState>().loadViagens(),
+        onRetry: onRetry,
       );
     }
 
@@ -122,7 +134,7 @@ class _ViagensBody extends StatelessWidget {
               return;
             }
 
-            await context.read<ViagemState>().loadViagens();
+            await onRetry();
           },
         );
       },

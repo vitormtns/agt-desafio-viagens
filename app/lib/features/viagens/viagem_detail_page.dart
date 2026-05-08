@@ -5,6 +5,8 @@ import '../../core/theme/app_colors.dart';
 import '../../core/utils/date_formatter.dart';
 import '../../core/widgets/status_badge.dart';
 import '../../models/viagem.dart';
+import '../../services/api_client.dart';
+import '../../state/auth_state.dart';
 import '../../state/viagem_state.dart';
 import 'widgets/viagem_action_buttons.dart';
 
@@ -33,12 +35,13 @@ class _ViagemDetailPageState extends State<ViagemDetailPage> {
       return;
     }
 
-    final updated = await context.read<ViagemState>().atualizarStatusViagem(
-      _viagem.id,
-      status,
-    );
+    final updated = await _atualizarStatus(status);
 
     if (!mounted) {
+      return;
+    }
+
+    if (!context.read<AuthState>().isAuthenticated) {
       return;
     }
 
@@ -60,6 +63,20 @@ class _ViagemDetailPageState extends State<ViagemDetailPage> {
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(SnackBar(content: Text(_successMessage(status))));
+  }
+
+  Future<Viagem?> _atualizarStatus(String status) async {
+    try {
+      return await context.read<ViagemState>().atualizarStatusViagem(
+        _viagem.id,
+        status,
+      );
+    } on ApiUnauthorizedException {
+      if (mounted) {
+        await context.read<AuthState>().expireSession();
+      }
+      return null;
+    }
   }
 
   Future<bool> _confirmStatusChange(String status) async {

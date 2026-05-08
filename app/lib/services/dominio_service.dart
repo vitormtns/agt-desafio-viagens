@@ -34,6 +34,8 @@ class DominioService {
       throw const DominioException('Não foi possível carregar as opções.');
     } on DominioException {
       rethrow;
+    } on ApiUnauthorizedException {
+      rethrow;
     } on ApiException catch (error) {
       throw DominioException(error.message);
     } on FormatException catch (_) {

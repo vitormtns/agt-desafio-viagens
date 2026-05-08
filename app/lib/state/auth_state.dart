@@ -7,6 +7,9 @@ class AuthState extends ChangeNotifier {
   AuthState({AuthService? authService})
     : _authService = authService ?? AuthService();
 
+  static const sessionExpiredMessage =
+      'Sua sessão expirou. Faça login novamente.';
+
   final AuthService _authService;
   AuthTokens? _tokens;
   bool _isLoading = false;
@@ -65,6 +68,15 @@ class AuthState extends ChangeNotifier {
     _tokens = null;
     _errorMessage = null;
     _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> expireSession() async {
+    await _authService.logout();
+    _tokens = null;
+    _errorMessage = sessionExpiredMessage;
+    _isLoading = false;
+    _isCheckingAuth = false;
     notifyListeners();
   }
 

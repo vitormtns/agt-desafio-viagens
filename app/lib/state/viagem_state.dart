@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import '../models/viagem.dart';
+import '../services/api_client.dart';
 import '../services/viagem_service.dart';
 
 class ViagemState extends ChangeNotifier {
@@ -33,6 +34,9 @@ class ViagemState extends ChangeNotifier {
         ..addAll(viagens);
     } on ViagemException catch (error) {
       _errorMessage = error.message;
+    } on ApiUnauthorizedException {
+      _errorMessage = null;
+      rethrow;
     } catch (_) {
       _errorMessage = 'Ocorreu um erro inesperado ao carregar suas viagens.';
     } finally {
@@ -67,6 +71,9 @@ class ViagemState extends ChangeNotifier {
     } on ViagemException catch (error) {
       _errorMessage = error.message;
       return false;
+    } on ApiUnauthorizedException {
+      _errorMessage = null;
+      rethrow;
     } catch (_) {
       _errorMessage = 'Ocorreu um erro inesperado ao salvar a viagem.';
       return false;
@@ -91,6 +98,9 @@ class ViagemState extends ChangeNotifier {
     } on ViagemException catch (error) {
       _errorMessage = error.message;
       return null;
+    } on ApiUnauthorizedException {
+      _errorMessage = null;
+      rethrow;
     } catch (_) {
       _errorMessage = 'Ocorreu um erro inesperado ao atualizar o status.';
       return null;
