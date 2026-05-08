@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/app_button.dart';
+import '../status_action_rules.dart';
 
 class ViagemActionButtons extends StatelessWidget {
   const ViagemActionButtons({
@@ -17,69 +18,70 @@ class ViagemActionButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    switch (status) {
-      case 'AGENDADA':
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            AppButton(
-              label: 'Iniciar viagem',
-              icon: Icons.play_arrow_outlined,
+    final actions = statusActionsFor(status);
+
+    if (actions.isNotEmpty) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          for (final (index, action) in actions.indexed) ...[
+            if (index > 0) const SizedBox(height: 12),
+            _ActionButton(
+              action: action,
               isLoading: isLoading,
-              onPressed: () => onChangeStatus('EM_ANDAMENTO'),
-            ),
-            const SizedBox(height: 12),
-            _CancelButton(
-              isLoading: isLoading,
-              onPressed: () => onChangeStatus('CANCELADA'),
+              onPressed: () => onChangeStatus(action.nextStatus),
             ),
           ],
-        );
-      case 'EM_ANDAMENTO':
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            AppButton(
-              label: 'Concluir viagem',
-              icon: Icons.check_circle_outline,
-              isLoading: isLoading,
-              onPressed: () => onChangeStatus('CONCLUIDA'),
-            ),
-            const SizedBox(height: 12),
-            _CancelButton(
-              isLoading: isLoading,
-              onPressed: () => onChangeStatus('CANCELADA'),
-            ),
-          ],
-        );
-      case 'CONCLUIDA':
-        return const _StatusMessage(
-          icon: Icons.check_circle_outline,
-          message: 'Esta viagem já foi concluída.',
-        );
-      case 'CANCELADA':
-        return const _StatusMessage(
-          icon: Icons.cancel_outlined,
-          message: 'Esta viagem foi cancelada.',
-        );
-      default:
-        return const SizedBox.shrink();
+        ],
+      );
     }
+
+    if (status == 'CONCLUIDA') {
+      return const _StatusMessage(
+        icon: Icons.check_circle_outline,
+        message: 'Esta viagem já foi concluída.',
+      );
+    }
+
+    if (status == 'CANCELADA') {
+      return const _StatusMessage(
+        icon: Icons.cancel_outlined,
+        message: 'Esta viagem foi cancelada.',
+      );
+    }
+
+    return const SizedBox.shrink();
   }
 }
 
-class _CancelButton extends StatelessWidget {
-  const _CancelButton({required this.isLoading, required this.onPressed});
+class _ActionButton extends StatelessWidget {
+  const _ActionButton({
+    required this.action,
+    required this.isLoading,
+    required this.onPressed,
+  });
 
+  final StatusAction action;
   final bool isLoading;
   final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
+    if (action.nextStatus != 'CANCELADA') {
+      return AppButton(
+        label: action.label,
+        icon: action.nextStatus == 'EM_ANDAMENTO'
+            ? Icons.play_arrow_outlined
+            : Icons.check_circle_outline,
+        isLoading: isLoading,
+        onPressed: onPressed,
+      );
+    }
+
     return OutlinedButton.icon(
       onPressed: isLoading ? null : onPressed,
       icon: const Icon(Icons.cancel_outlined),
-      label: const Text('Cancelar viagem'),
+      label: Text(action.label),
       style: OutlinedButton.styleFrom(
         foregroundColor: AppColors.canceledText,
         side: const BorderSide(color: AppColors.canceledText),

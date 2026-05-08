@@ -3,7 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('exibe tela de login quando nao ha token salvo', (tester) async {
+  testWidgets('exibe tela de login quando não há token salvo', (tester) async {
     FlutterSecureStorage.setMockInitialValues({});
 
     await tester.pumpWidget(const App());
