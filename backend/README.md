@@ -1,4 +1,4 @@
-# viagens-backend
+# backend
 
 Backend scaffold do desafio técnico AGT — **Controle de Viagens Corporativas**.
 
