@@ -1,17 +1,12 @@
 # Backend
 
-API REST Spring Boot do desafio técnico **AGT Viagens - Controle de Viagens Corporativas**.
+API REST Spring Boot do desafio técnico **AGT Viagens - Desafio Técnico**.
 
 Este README resume apenas os comandos principais do backend. A documentação completa da entrega está no [README da raiz](../README.md).
 
-## Pré-requisitos
-
-- Java 21+
-- Maven 3.9+ ou Maven Wrapper
-
 ## Como rodar
 
-No Windows:
+A partir desta pasta (`backend/`):
 
 ```powershell
 .\mvnw.cmd spring-boot:run "-Dspring-boot.run.profiles=dev"
@@ -23,22 +18,9 @@ Após subir o backend:
 - Swagger: http://127.0.0.1:8080/swagger-ui/index.html
 - H2 Console: http://127.0.0.1:8080/h2-console
 
-## Credenciais de teste
-
-- Usuário: `usuario.teste`
-- Senha: `senha123`
-
-## Endpoints principais
-
-- `POST /auth/login`
-- `POST /auth/refresh`
-- `GET /dominios/finalidades`
-- `GET /dominios/transportes`
-- `GET /viagens`
-- `POST /viagens`
-- `PATCH /viagens/{id}/status`
-
 ## Testes
+
+A partir desta pasta (`backend/`):
 
 ```powershell
 .\mvnw.cmd test
@@ -46,6 +28,6 @@ Após subir o backend:
 
 ## Observações
 
-- Em perfil dev, o banco H2 é em memória.
-- Os endpoints de viagens já estão implementados.
-- As regras de transição de status são validadas no backend.
+- Use Java 21.
+- Em perfil dev, o H2 é em memória.
+- Credenciais de teste, endpoints, regras de status e decisões técnicas estão documentados no README principal.
