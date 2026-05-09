@@ -23,12 +23,20 @@ class AppErrorState extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(
-              Icons.warning_amber_rounded,
-              size: 44,
-              color: AppColors.canceledText,
+            Container(
+              width: 64,
+              height: 64,
+              decoration: const BoxDecoration(
+                color: AppColors.canceled,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.warning_amber_rounded,
+                size: 32,
+                color: AppColors.canceledText,
+              ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
             Text(
               title,
               style: Theme.of(context).textTheme.titleMedium,
@@ -43,11 +51,14 @@ class AppErrorState extends StatelessWidget {
               ).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary),
             ),
             if (onRetry != null) ...[
-              const SizedBox(height: 16),
-              AppButton(
-                label: 'Tentar novamente',
-                icon: Icons.refresh,
-                onPressed: onRetry,
+              const SizedBox(height: 20),
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 240),
+                child: AppButton(
+                  label: 'Tentar novamente',
+                  icon: Icons.refresh,
+                  onPressed: onRetry,
+                ),
               ),
             ],
           ],

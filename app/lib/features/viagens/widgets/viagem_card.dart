@@ -19,9 +19,9 @@ class ViagemCard extends StatelessWidget {
     return Card(
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
         child: Padding(
-          padding: const EdgeInsets.all(18),
+          padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -33,23 +33,23 @@ class ViagemCard extends StatelessWidget {
                       viagem.destino,
                       style: Theme.of(
                         context,
-                      ).textTheme.titleMedium?.copyWith(fontSize: 18),
+                      ).textTheme.titleMedium?.copyWith(fontSize: 19),
                     ),
                   ),
                   const SizedBox(width: 12),
                   StatusBadge(status: viagem.status),
                 ],
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: 16),
               _InfoRow(
                 icon: Icons.calendar_today_outlined,
                 label: 'Período',
                 value: periodo,
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 14),
               Wrap(
-                spacing: 12,
-                runSpacing: 10,
+                spacing: 14,
+                runSpacing: 12,
                 children: [
                   _InfoChip(
                     icon: Icons.flag_outlined,
@@ -63,7 +63,7 @@ class ViagemCard extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: 16),
               const Divider(height: 1),
               const SizedBox(height: 12),
               Row(
@@ -72,13 +72,14 @@ class ViagemCard extends StatelessWidget {
                     'Toque para ver detalhes',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: AppColors.textSecondary,
-                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                   const SizedBox(width: 4),
                   const Icon(
                     Icons.chevron_right,
-                    size: 16,
+                    size: 17,
                     color: AppColors.textSecondary,
                   ),
                 ],
@@ -110,7 +111,7 @@ class _InfoChip extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 18, color: AppColors.textSecondary),
+          Icon(icon, size: 19, color: AppColors.primary),
           const SizedBox(width: 8),
           Flexible(
             child: Column(
@@ -120,11 +121,16 @@ class _InfoChip extends StatelessWidget {
                   label,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: AppColors.textSecondary,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w800,
                   ),
                 ),
                 const SizedBox(height: 2),
-                Text(value, style: Theme.of(context).textTheme.bodyMedium),
+                Text(
+                  value,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                ),
               ],
             ),
           ),
@@ -150,7 +156,7 @@ class _InfoRow extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, size: 18, color: AppColors.textSecondary),
+        Icon(icon, size: 19, color: AppColors.primary),
         const SizedBox(width: 8),
         Expanded(
           child: RichText(
@@ -161,10 +167,13 @@ class _InfoRow extends StatelessWidget {
                   text: '$label: ',
                   style: const TextStyle(
                     color: AppColors.textSecondary,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w800,
                   ),
                 ),
-                TextSpan(text: value),
+                TextSpan(
+                  text: value,
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
               ],
             ),
           ),

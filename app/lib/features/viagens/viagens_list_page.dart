@@ -96,6 +96,7 @@ class _ViagensListPageState extends State<ViagensListPage> {
         icon: const Icon(Icons.add),
         label: const Text('Nova viagem'),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       backgroundColor: AppColors.background,
     );
   }
@@ -147,7 +148,7 @@ class _ViagensBody extends StatelessWidget {
 
     return ListView.separated(
       physics: const AlwaysScrollableScrollPhysics(),
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 128),
+      padding: const EdgeInsets.fromLTRB(16, 18, 16, 140),
       itemCount: viagemState.viagens.length + 1,
       separatorBuilder: (_, index) =>
           index == 0 ? const SizedBox(height: 16) : const SizedBox(height: 12),
@@ -190,9 +191,9 @@ class _ListHeader extends StatelessWidget {
           'Acompanhe suas solicitações corporativas',
           style: Theme.of(
             context,
-          ).textTheme.titleMedium?.copyWith(fontSize: 18),
+          ).textTheme.titleMedium?.copyWith(fontSize: 20),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: 6),
         Text(
           'Consulte destino, período, transporte e status das viagens.',
           style: Theme.of(

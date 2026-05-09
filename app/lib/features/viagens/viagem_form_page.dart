@@ -172,22 +172,22 @@ class _ViagemFormPageState extends State<ViagemFormPage> {
     return Form(
       key: _formKey,
       child: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(16, 18, 16, 28),
         children: [
           Text(
             'Informe os dados da solicitação',
             style: Theme.of(
               context,
-            ).textTheme.titleMedium?.copyWith(fontSize: 18),
+            ).textTheme.titleMedium?.copyWith(fontSize: 20),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 6),
           Text(
             'A viagem será criada com status Agendada.',
             style: Theme.of(
               context,
             ).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 24),
           TextFormField(
             controller: _destinoController,
             enabled: !viagemState.isSaving,
@@ -204,7 +204,7 @@ class _ViagemFormPageState extends State<ViagemFormPage> {
               return null;
             },
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 18),
           _DateField(
             label: 'Data de ida',
             value: _dataIda,
@@ -220,7 +220,7 @@ class _ViagemFormPageState extends State<ViagemFormPage> {
               return null;
             },
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 18),
           _DateField(
             label: 'Data de volta',
             value: _dataVolta,
@@ -239,9 +239,9 @@ class _ViagemFormPageState extends State<ViagemFormPage> {
               return null;
             },
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
           const _DateHelperText(),
-          const SizedBox(height: 16),
+          const SizedBox(height: 18),
           DropdownButtonFormField<String>(
             initialValue: _finalidadeSelecionada,
             decoration: const InputDecoration(
@@ -266,7 +266,7 @@ class _ViagemFormPageState extends State<ViagemFormPage> {
               return null;
             },
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 18),
           DropdownButtonFormField<String>(
             initialValue: _transporteSelecionado,
             decoration: const InputDecoration(
@@ -291,7 +291,7 @@ class _ViagemFormPageState extends State<ViagemFormPage> {
               return null;
             },
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 18),
           TextFormField(
             controller: _observacoesController,
             enabled: !viagemState.isSaving,
@@ -304,17 +304,16 @@ class _ViagemFormPageState extends State<ViagemFormPage> {
             ),
           ),
           if (viagemState.errorMessage != null) ...[
-            const SizedBox(height: 16),
+            const SizedBox(height: 18),
             _SaveError(message: viagemState.errorMessage!),
           ],
-          const SizedBox(height: 24),
+          const SizedBox(height: 28),
           AppButton(
             label: 'Salvar viagem',
-            icon: Icons.save_outlined,
             isLoading: viagemState.isSaving,
             onPressed: _save,
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
         ],
       ),
     );
@@ -329,12 +328,20 @@ class _DateHelperText extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Icon(
-          Icons.info_outline,
-          size: 16,
-          color: AppColors.textSecondary,
+        Container(
+          width: 24,
+          height: 24,
+          decoration: const BoxDecoration(
+            color: AppColors.primarySoft,
+            shape: BoxShape.circle,
+          ),
+          child: const Icon(
+            Icons.info_outline,
+            size: 15,
+            color: AppColors.primary,
+          ),
         ),
-        const SizedBox(width: 6),
+        const SizedBox(width: 8),
         Expanded(
           child: Text(
             'A data de volta não pode ser anterior à data de ida.',
@@ -393,7 +400,7 @@ class _SaveError extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: AppColors.canceled,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: AppColors.canceledText.withValues(alpha: 0.2),
         ),

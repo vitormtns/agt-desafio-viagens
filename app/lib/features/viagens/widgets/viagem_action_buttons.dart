@@ -70,9 +70,10 @@ class _ActionButton extends StatelessWidget {
       label: Text(action.label),
       style: OutlinedButton.styleFrom(
         foregroundColor: AppColors.canceledText,
-        side: const BorderSide(color: AppColors.canceledText),
-        minimumSize: const Size.fromHeight(48),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        side: BorderSide(color: AppColors.canceledText.withValues(alpha: 0.8)),
+        minimumSize: const Size.fromHeight(52),
+        textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     );
   }

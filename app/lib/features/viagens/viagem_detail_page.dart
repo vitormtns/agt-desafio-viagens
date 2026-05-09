@@ -146,14 +146,14 @@ class _ViagemDetailPageState extends State<ViagemDetailPage> {
         appBar: AppBar(title: const Text('Detalhe da viagem')),
         body: SafeArea(
           child: ListView(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.fromLTRB(16, 18, 16, 28),
             children: [
               _Header(viagem: _viagem),
-              const SizedBox(height: 16),
+              const SizedBox(height: 18),
               _InfoCard(viagem: _viagem),
-              const SizedBox(height: 16),
+              const SizedBox(height: 18),
               _NextActionCard(status: _viagem.status),
-              const SizedBox(height: 20),
+              const SizedBox(height: 22),
               ViagemActionButtons(
                 status: _viagem.status,
                 isLoading: viagemState.isUpdatingStatus,
@@ -207,11 +207,19 @@ class _NextActionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(18),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(_icon, color: AppColors.primary, size: 22),
+            Container(
+              width: 42,
+              height: 42,
+              decoration: BoxDecoration(
+                color: AppColors.primarySoft,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(_icon, color: AppColors.primary, size: 22),
+            ),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
@@ -219,9 +227,11 @@ class _NextActionCard extends StatelessWidget {
                 children: [
                   Text(
                     'Próxima ação',
-                    style: Theme.of(context).textTheme.titleMedium,
+                    style: Theme.of(
+                      context,
+                    ).textTheme.titleMedium?.copyWith(fontSize: 16),
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 5),
                   Text(
                     _message,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -247,7 +257,7 @@ class _Header extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -257,20 +267,34 @@ class _Header extends StatelessWidget {
                 Expanded(
                   child: Text(
                     viagem.destino,
-                    style: Theme.of(context).textTheme.headlineSmall,
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 12),
                 StatusBadge(status: viagem.status),
               ],
             ),
-            const SizedBox(height: 12),
-            Text(
-              '${DateFormatter.date(viagem.dataIda)} a ${DateFormatter.date(viagem.dataVolta)}',
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: AppColors.textSecondary,
-                fontWeight: FontWeight.w600,
-              ),
+            const SizedBox(height: 14),
+            Row(
+              children: [
+                const Icon(
+                  Icons.calendar_month_outlined,
+                  color: AppColors.primary,
+                  size: 19,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    '${DateFormatter.date(viagem.dataIda)} a ${DateFormatter.date(viagem.dataVolta)}',
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: AppColors.textSecondary,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -290,7 +314,7 @@ class _InfoCard extends StatelessWidget {
 
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
         child: Column(
           children: [
             _InfoRow(
@@ -298,25 +322,25 @@ class _InfoCard extends StatelessWidget {
               label: 'Data de ida',
               value: DateFormatter.date(viagem.dataIda),
             ),
-            const Divider(height: 24),
+            const Divider(height: 22),
             _InfoRow(
               icon: Icons.event_available_outlined,
               label: 'Data de volta',
               value: DateFormatter.date(viagem.dataVolta),
             ),
-            const Divider(height: 24),
+            const Divider(height: 22),
             _InfoRow(
               icon: Icons.flag_outlined,
               label: 'Finalidade',
               value: viagem.finalidade,
             ),
-            const Divider(height: 24),
+            const Divider(height: 22),
             _InfoRow(
               icon: Icons.directions_car_outlined,
               label: 'Transporte',
               value: viagem.transporte,
             ),
-            const Divider(height: 24),
+            const Divider(height: 22),
             _InfoRow(
               icon: Icons.notes_outlined,
               label: 'Observações',
@@ -324,7 +348,7 @@ class _InfoCard extends StatelessWidget {
                   ? 'Nenhuma observação informada.'
                   : observacoes,
             ),
-            const Divider(height: 24),
+            const Divider(height: 22),
             _InfoRow(
               icon: Icons.access_time_outlined,
               label: 'Criada em',
@@ -353,7 +377,15 @@ class _InfoRow extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, color: AppColors.textSecondary, size: 20),
+        Container(
+          width: 34,
+          height: 34,
+          decoration: BoxDecoration(
+            color: AppColors.primarySoft,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Icon(icon, color: AppColors.primary, size: 19),
+        ),
         const SizedBox(width: 12),
         Expanded(
           child: Column(
@@ -363,11 +395,16 @@ class _InfoRow extends StatelessWidget {
                 label,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: AppColors.textSecondary,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w800,
                 ),
               ),
-              const SizedBox(height: 4),
-              Text(value, style: Theme.of(context).textTheme.bodyMedium),
+              const SizedBox(height: 3),
+              Text(
+                value,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+              ),
             ],
           ),
         ),

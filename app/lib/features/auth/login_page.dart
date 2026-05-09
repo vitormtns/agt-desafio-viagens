@@ -46,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 420),
               child: Form(
@@ -54,16 +54,28 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const Icon(
-                      Icons.eco_outlined,
-                      color: AppColors.primary,
-                      size: 48,
+                    Center(
+                      child: Container(
+                        width: 76,
+                        height: 76,
+                        decoration: BoxDecoration(
+                          color: AppColors.primarySoft,
+                          borderRadius: BorderRadius.circular(22),
+                          border: Border.all(color: AppColors.border),
+                        ),
+                        child: const Icon(
+                          Icons.eco_outlined,
+                          color: AppColors.primary,
+                          size: 42,
+                        ),
+                      ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 20),
                     Text(
                       'AGT Viagens',
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headlineSmall,
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(fontSize: 28, fontWeight: FontWeight.w800),
                     ),
                     const SizedBox(height: 8),
                     Text(
@@ -73,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
                         color: AppColors.textSecondary,
                       ),
                     ),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 36),
                     TextFormField(
                       controller: _usernameController,
                       enabled: !authState.isLoading,
@@ -91,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
                       },
                       onChanged: (_) => authState.clearError(),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 18),
                     TextFormField(
                       controller: _passwordController,
                       enabled: !authState.isLoading,
@@ -132,10 +144,10 @@ class _LoginPageState extends State<LoginPage> {
                       onChanged: (_) => authState.clearError(),
                     ),
                     if (authState.errorMessage != null) ...[
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 18),
                       _LoginError(message: authState.errorMessage!),
                     ],
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 28),
                     AppButton(
                       label: 'Entrar',
                       icon: Icons.login,
@@ -164,7 +176,7 @@ class _LoginError extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: AppColors.canceled,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: AppColors.canceledText.withValues(alpha: 0.2),
         ),

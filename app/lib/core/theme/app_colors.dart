@@ -6,9 +6,11 @@ class AppColors {
   static const Color primaryDark = Color(0xFF123C2C);
   static const Color primary = Color(0xFF1F6B43);
   static const Color primaryMedium = Color(0xFF2E8B57);
+  static const Color primarySoft = Color(0xFFEAF4ED);
   static const Color background = Color(0xFFF4F7F2);
   static const Color card = Color(0xFFFFFFFF);
   static const Color border = Color(0xFFDDE6DA);
+  static const Color borderStrong = Color(0xFFC9D8C4);
   static const Color citrus = Color(0xFFE8A13A);
   static const Color textPrimary = Color(0xFF10251B);
   static const Color textSecondary = Color(0xFF5D6F63);
