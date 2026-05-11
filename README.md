@@ -21,6 +21,17 @@ README.md
 - `app/`: aplicativo Flutter.
 - `README.md`: documentação principal da entrega.
 
+## Organização do versionamento
+
+O desenvolvimento começou preservando a base original recebida na branch `main`. A branch `dev` foi usada para implementar o escopo principal: endpoints pendentes no backend, criação do app Flutter, autenticação, listagem, criação de viagem, detalhe/status, tratamento de erros e testes.
+
+Depois que o escopo obrigatório estava funcional, foram criadas branches específicas para melhorias:
+
+- `feature/ux-travel-polish`: refinamentos de experiência, visual e pequenos ajustes de UX.
+- `docs/final-readme`: documentação final, decisões técnicas e instruções de execução.
+
+Essas branches foram mantidas no repositório para deixar o processo de evolução mais transparente. A versão final está consolidada na `main`.
+
 ## Tecnologias utilizadas
 
 Backend:
@@ -60,7 +71,7 @@ Endpoints prontos no scaffold:
 - `GET /dominios/finalidades`
 - `GET /dominios/transportes`
 
-Endpoints de viagens implementados no desafio:
+Escopo implementado no backend:
 
 - `GET /viagens`
 - `POST /viagens`
@@ -119,7 +130,7 @@ cd backend
 .\mvnw.cmd spring-boot:run "-Dspring-boot.run.profiles=dev"
 ```
 
-O perfil `dev` utiliza H2 em memória e facilita a execução local do desafio.
+O perfil `dev` utiliza H2 em memória como decisão de entrega para preservar o scaffold original, facilitar a execução local e reduzir riscos de configuração de ambiente.
 
 Após subir o backend:
 
@@ -238,6 +249,7 @@ Tomada de decisão:
 - O app segue uma abordagem online-first, consumindo diretamente a API Java.
 - TokenStorage usa `flutter_secure_storage` para persistir `accessToken` e `refreshToken`.
 - O backend centraliza as regras de status e valida as transições permitidas.
+- O H2 em memória foi mantido no perfil `dev` para preservar o scaffold original, facilitar a execução local e reduzir riscos de ambiente.
 - O app aplica uma ordenação visual adicional por status para priorizar viagens acionáveis, preservando a ordenação por criação mais recente dentro de cada status.
 - A solução prioriza um MVP funcional, consistente e seguro, com complexidade proporcional ao prazo e ao escopo do desafio.
 
