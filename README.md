@@ -179,7 +179,7 @@ cd backend
 Resultado atual:
 
 - `BUILD SUCCESS`
-- 6 testes executados
+- 6 testes executados, focados em regras críticas do backend
 
 App:
 
@@ -192,7 +192,7 @@ flutter test
 Resultados atuais:
 
 - `flutter analyze` sem issues
-- `flutter test` com 17 testes executados
+- `flutter test` com 17 testes unitários focados em regras críticas do app
 
 ## Fluxo manual de teste sugerido
 
@@ -209,15 +209,37 @@ Resultados atuais:
 11. Desligar o backend e confirmar a exibição de erro com opção de tentar novamente.
 12. Aguardar a expiração da sessão ou usar token inválido e confirmar o retorno ao login com mensagem de sessão expirada.
 
+## Organização, clareza e tomada de decisão
+
+Organização:
+
+- O projeto foi separado em `backend/` e `app/`, mantendo responsabilidades bem definidas entre API Java e cliente Flutter.
+- O backend preserva a arquitetura original do scaffold, com as implementações do desafio encaixadas nas camadas já existentes.
+- O app está organizado em `core`, `models`, `services`, `state` e `features`, separando infraestrutura, modelos, integração com API, estado de tela e fluxos de interface.
+
+Clareza na implementação:
+
+- Os services isolam o consumo da API das telas, deixando a interface focada em estado, navegação e apresentação.
+- Provider/ChangeNotifier centraliza estados do app sem adicionar complexidade desnecessária ao MVP.
+- As telas tratam carregamento, lista vazia, erro, tentar novamente, timeout e sessão expirada.
+- O fluxo principal do usuário é direto: login, lista de viagens, criação, detalhe e alteração de status.
+
+Tomada de decisão:
+
+- O backend foi mantido como fonte de verdade para as regras de transição de status.
+- O app exibe apenas as ações possíveis para o status atual de cada viagem.
+- O refresh token é armazenado com segurança, mas a renovação automática do access token não foi implementada para manter o escopo controlado.
+- Quando a API retorna `401` ou `403`, o app limpa a sessão local e retorna para o login.
+- Modo offline e sincronização foram documentados como evolução futura, não como parte desta versão.
+- A UI foi inspirada na identidade visual da AGT/Agroterenas, sem uso de logotipo oficial ou assets externos.
+
 ## Decisões técnicas
 
-- Provider/ChangeNotifier foi escolhido por simplicidade e aderência ao escopo.
-- Services separam o consumo da API das telas.
-- TokenStorage usa `flutter_secure_storage` para persistir os tokens com segurança.
-- Backend manteve a arquitetura original do scaffold.
-- Regras de status foram centralizadas no backend.
-- App possui ordenação visual adicional por status para priorizar viagens acionáveis.
-- UI pensada para uso corporativo, com identidade inspirada na AGT/Agroterenas, sem uso de logotipo oficial ou assets externos.
+- O app segue uma abordagem online-first, consumindo diretamente a API Java.
+- TokenStorage usa `flutter_secure_storage` para persistir `accessToken` e `refreshToken`.
+- O backend centraliza as regras de status e valida as transições permitidas.
+- O app aplica uma ordenação visual adicional por status para priorizar viagens acionáveis, preservando a ordenação por criação mais recente dentro de cada status.
+- A solução prioriza um MVP funcional, consistente e seguro, com complexidade proporcional ao prazo e ao escopo do desafio.
 
 ## Observações importantes
 
@@ -227,27 +249,27 @@ Resultados atuais:
 - O refresh token é armazenado, mas a renovação automática do access token não foi implementada nesta versão.
 - Quando a API retorna `401` ou `403`, o app limpa a sessão local, volta para o login e informa que a sessão expirou.
 
-## Possível evolução: modo offline e sincronização
+## Escopo e melhorias futuras
 
-Nesta versão, o app trabalha no modelo online-first. As viagens são enviadas diretamente para a API Java, e apenas os tokens são armazenados localmente.
+Implementado nesta versão:
 
-Uma evolução futura poderia incluir:
+- app online-first consumindo a API Java;
+- armazenamento seguro dos tokens;
+- sessão persistente;
+- tratamento de sessão expirada com retorno ao login;
+- timeout e opção de tentar novamente;
+- testes unitários focados em regras críticas;
+- polimento visual e de UX.
 
-- banco local no app, como SQLite/Drift;
-- fila de operações pendentes;
-- campo `syncStatus` com valores como `PENDENTE`, `ENVIANDO`, `SINCRONIZADO` e `ERRO`;
-- sincronização automática quando houver conexão;
-- envio para a API Java, que persistiria no banco corporativo, como Oracle ou PostgreSQL;
-- tratamento de conflitos entre dados locais e servidor.
-
-Essa seção descreve uma melhoria futura. O modo offline e a sincronização local não fazem parte das funcionalidades implementadas nesta versão.
-
-## Melhorias futuras
+Deixado como melhoria futura:
 
 - refresh token automático;
-- filtros simples por status;
-- busca por destino;
-- paginação;
-- testes automatizados adicionais de widget/service;
-- CORS mais restritivo para produção;
-- modo offline/sincronização.
+- modo offline com banco local;
+- fila de operações pendentes;
+- sincronização com a API Java;
+- persistência futura em banco corporativo, como Oracle ou PostgreSQL;
+- filtros, busca e paginação;
+- testes adicionais de widget/service;
+- CORS mais restritivo para produção.
+
+Esses itens foram deixados como evolução futura por decisão de escopo, para manter o MVP funcional, consistente e seguro dentro do prazo. Eles não representam falhas da entrega atual, mas caminhos naturais de evolução para um produto em produção.
